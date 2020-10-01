@@ -13,8 +13,6 @@ iostream
 -
 fstream
 -
-Windows.h
--
 messages.h
 /cygdrive/c/Users/Andrewsha/CLionProjects/Lab1/messages.h
 constants.h

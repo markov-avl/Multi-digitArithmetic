@@ -1,29 +1,38 @@
 #include <iostream>
 #include <fstream>
-#include <Windows.h>
 #include "messages.h"
 #include "constants.h"
 
 bool process(std::ifstream &inFile, std::ofstream &outFile, const char* inPath) {
+    int index = 0;
     if (!inFile.is_open()) {
         outFile << fileNotFound(inPath);
-        return false;
     } else {
         std::string line;
-        int index = 0;
+        int sum = 0;
+        bool sign = true;
 
         while (!inFile.eof())
         {
             getline(inFile, line);
-            std::cout << line << std::endl;
+            if (index % 2 == 0) {
+                if (sign) {
+                    sum += stoi(line, nullptr);
+                } else {
+                    sum -= stoi(line, nullptr);
+                }
+            } else {
+                sign = line[0] == '+';
+            }
             index++;
         }
+
         if (index == 0) {
             outFile << fileIsEmpty(inPath);
-            return false;
         } else {
-            return true;
+            std::cout << sum << std::endl;
         }
+        return index > 0;
     }
 }
 
