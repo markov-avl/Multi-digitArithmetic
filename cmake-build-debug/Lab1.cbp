@@ -80,6 +80,9 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="/cygdrive/c/Users/Andrewsha/CLionProjects/Lab1/constants.cpp">
+			<Option target="Lab1"/>
+		</Unit>
 		<Unit filename="/cygdrive/c/Users/Andrewsha/CLionProjects/Lab1/constants.h">
 			<Option target="Lab1"/>
 		</Unit>
@@ -96,6 +99,12 @@
 			<Option target="Lab1"/>
 		</Unit>
 		<Unit filename="/cygdrive/c/Users/Andrewsha/CLionProjects/Lab1/messages.h">
+			<Option target="Lab1"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Andrewsha/CLionProjects/Lab1/parse.cpp">
+			<Option target="Lab1"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Andrewsha/CLionProjects/Lab1/parse.h">
 			<Option target="Lab1"/>
 		</Unit>
 		<Unit filename="/cygdrive/c/Users/Andrewsha/CLionProjects/Lab1/CMakeLists.txt">

@@ -143,6 +143,33 @@ Lab1/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Lab1.dir/build.make CMakeFiles/Lab1.dir/build
 .PHONY : Lab1/fast
 
+constants.o: constants.cpp.o
+
+.PHONY : constants.o
+
+# target to build an object file
+constants.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Lab1.dir/build.make CMakeFiles/Lab1.dir/constants.cpp.o
+.PHONY : constants.cpp.o
+
+constants.i: constants.cpp.i
+
+.PHONY : constants.i
+
+# target to preprocess a source file
+constants.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Lab1.dir/build.make CMakeFiles/Lab1.dir/constants.cpp.i
+.PHONY : constants.cpp.i
+
+constants.s: constants.cpp.s
+
+.PHONY : constants.s
+
+# target to generate assembly for a file
+constants.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Lab1.dir/build.make CMakeFiles/Lab1.dir/constants.cpp.s
+.PHONY : constants.cpp.s
+
 longnum.o: longnum.cpp.o
 
 .PHONY : longnum.o
@@ -224,6 +251,33 @@ messages.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Lab1.dir/build.make CMakeFiles/Lab1.dir/messages.cpp.s
 .PHONY : messages.cpp.s
 
+parse.o: parse.cpp.o
+
+.PHONY : parse.o
+
+# target to build an object file
+parse.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Lab1.dir/build.make CMakeFiles/Lab1.dir/parse.cpp.o
+.PHONY : parse.cpp.o
+
+parse.i: parse.cpp.i
+
+.PHONY : parse.i
+
+# target to preprocess a source file
+parse.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Lab1.dir/build.make CMakeFiles/Lab1.dir/parse.cpp.i
+.PHONY : parse.cpp.i
+
+parse.s: parse.cpp.s
+
+.PHONY : parse.s
+
+# target to generate assembly for a file
+parse.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Lab1.dir/build.make CMakeFiles/Lab1.dir/parse.cpp.s
+.PHONY : parse.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -233,6 +287,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... Lab1"
+	@echo "... constants.o"
+	@echo "... constants.i"
+	@echo "... constants.s"
 	@echo "... longnum.o"
 	@echo "... longnum.i"
 	@echo "... longnum.s"
@@ -242,6 +299,9 @@ help:
 	@echo "... messages.o"
 	@echo "... messages.i"
 	@echo "... messages.s"
+	@echo "... parse.o"
+	@echo "... parse.i"
+	@echo "... parse.s"
 .PHONY : help
 
 

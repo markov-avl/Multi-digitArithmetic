@@ -8,17 +8,21 @@
 
 /cygdrive/c/Users/Andrewsha/CLionProjects/Lab1/constants.h
 
-/cygdrive/c/Users/Andrewsha/CLionProjects/Lab1/main.cpp
-iostream
--
-fstream
--
-messages.h
-/cygdrive/c/Users/Andrewsha/CLionProjects/Lab1/messages.h
+/cygdrive/c/Users/Andrewsha/CLionProjects/Lab1/longnum.h
 constants.h
 /cygdrive/c/Users/Andrewsha/CLionProjects/Lab1/constants.h
 
 /cygdrive/c/Users/Andrewsha/CLionProjects/Lab1/messages.h
 iostream
 -
+
+/cygdrive/c/Users/Andrewsha/CLionProjects/Lab1/parse.cpp
+iostream
+-
+fstream
+-
+messages.h
+/cygdrive/c/Users/Andrewsha/CLionProjects/Lab1/messages.h
+longnum.h
+/cygdrive/c/Users/Andrewsha/CLionProjects/Lab1/longnum.h
 
