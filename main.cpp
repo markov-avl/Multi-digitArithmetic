@@ -30,7 +30,7 @@ bool process(std::ifstream &inFile, std::ofstream &outFile, const char* inPath) 
         if (index == 0) {
             outFile << fileIsEmpty(inPath);
         } else {
-            std::cout << sum << std::endl;
+            outFile << sum;
         }
         return index > 0;
     }
