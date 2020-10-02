@@ -14,7 +14,7 @@ LongNum getSum(bool isFileCorrect, bool sign, LongNum &sum, LongNum &num) {
      */
 }
 
-// some code ...
+// bux fix
 
 bool readSign(std::string &line, bool &sign) {
     if (line.length() == 2 && (line[0] == '+' || line[0] == '-')) {
