@@ -8,6 +8,6 @@ extern const char* OUT_PATH;
 constexpr short DATA_SIZE = 100;
 constexpr short BUFF_SIZE = DATA_SIZE * 2 + 3;
 
-constexpr short SOME_CONST = 1234;
+constexpr short SOME_CONST = 4321;
 
 #endif
