@@ -2,9 +2,12 @@
 #include "parse.h"
 #include "messages.h"
 #include "constants.h"
+#include "longnum.h"
 
 
 int main() {
+    LongNum num = getLongNum();
+
     std::ifstream inFile(IN_PATH);
     std::ofstream outFile(OUT_PATH);
 

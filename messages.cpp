@@ -1,4 +1,5 @@
 #include <iostream>
+#include "constants.h"
 
 
 std::string fileNotFound(const std::string &path) {
@@ -28,7 +29,8 @@ std::string unsuccessfullyCompleted(const std::string &inPath, const std::string
 
 std::string invalidLongNum(unsigned int index) {
     return "Строка " + std::to_string(index) + " - неверно введено число LongNum (проверьте правильность синтаксиса " +
-        "числа LongNum и убедитесь, что в начале и в конце строки не присутствуют лишние пробелы)";
+        "числа LongNum и убедитесь, что число значащих цифр в целой и дробной частях числа LongNum не превышает " +
+        std::to_string(BUFF_SIZE) + " и что в начале и в конце строки не присутствуют лишние пробелы)";
 }
 
 

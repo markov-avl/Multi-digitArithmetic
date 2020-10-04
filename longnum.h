@@ -11,10 +11,11 @@ typedef struct {
     unsigned char fraction[DATA_SIZE];
 } LongNum;
 
-
 LongNum getLongNum();
 bool readLongNum(std::string &line, LongNum &num);
 void writeLongNum(std::ofstream &outFile, LongNum &sum);
+LongNum sumLongNum(LongNum &a, LongNum &b);
+LongNum subLongNum(LongNum &a, LongNum &b);
 
 
 #endif
