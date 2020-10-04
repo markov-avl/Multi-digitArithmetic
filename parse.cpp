@@ -5,14 +5,15 @@
 
 
 LongNum getSum(bool isFileCorrect, bool sign, LongNum &sum, LongNum &num) {
-    /*
-     *  мы производим сумму, если файл корректен
-     *  если производим, то:
-     *      знак num нужно изменить (или оставить как есть) в соответствие с sign;
-     *      отправить sum и num в функцию суммирования;
-     *      вернуть результат суммирования
-     */
+    if (isFileCorrect) {
+        if (!sign) {
+            num.sign = !num.sign;
+        }
+        sum = sumLongNum(sum, num);
+    }
+    return sum;
 }
+
 
 bool readSign(std::string &line, bool &sign) {
     if (line.length() == 2 && (line[0] == '+' || line[0] == '-')) {
@@ -25,6 +26,7 @@ bool readSign(std::string &line, bool &sign) {
 
 bool process(std::ifstream &inFile, std::ofstream &outFile, const char* &inPath) {
     bool isFileCorrect = true;
+
     if (!inFile.is_open()) {
         outFile << fileNotFound(inPath);
         isFileCorrect = false;
