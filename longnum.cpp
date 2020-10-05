@@ -5,6 +5,8 @@
 LongNum getLongNum() {
     LongNum num;
     num.sign = true;
+    num.integerSize = 0;
+    num.fractionSize = 0;
     for (int i = 0; i < DATA_SIZE; i++) {
         num.integer[i] = 0;
         num.fraction[i] = 0;
@@ -15,10 +17,19 @@ LongNum getLongNum() {
 
 bool isDigit(char a, bool zero = true) {
     if (zero) {
-        return static_cast<short>(a) >= 48 && static_cast<short>(a) <= 55;
+        return a >= '0' && a <= '7';
     } else {
-        return static_cast<short>(a) >= 49 && static_cast<short>(a) <= 55;
+        return a >= '1' && a <= '7';
     }
+}
+
+
+std::string reverse(std::string &line) {
+    std::string reversed;
+    for (int i = static_cast<int>(line.length() - 1); i >= 0; i--) {
+        reversed += line[i];
+    }
+    return reversed;
 }
 
 
@@ -73,7 +84,7 @@ std::string getInteger(std::string &line) {
 
 // возвращает дробную часть числа, отбрасывая незначащие нули
 std::string getFraction(std::string &line) {
-    std::string fraction, reversedFraction;
+    std::string fraction;
     bool hasSignificantDigit = false;
     int startPosition = static_cast<int>(line.length() - 1);
     int dotPosition = static_cast<int>( line.find('.') );
@@ -81,7 +92,7 @@ std::string getFraction(std::string &line) {
 
     // сохраняет в fraction только значащие цифры
     for (int i = startPosition; i > endPosition; i--) {
-        if (!hasSignificantDigit && isDigit(line[i], false) ) {
+        if (!hasSignificantDigit && isDigit(line[i], false)) {
             hasSignificantDigit = true;
         }
         if (hasSignificantDigit) {
@@ -89,24 +100,59 @@ std::string getFraction(std::string &line) {
         }
     }
 
-    // инвентирует fraction, так как она записана не в верном направлении
-    for (int i = fraction.length(); i >= 0; i--) {
-        reversedFraction += fraction[i];
-    }
+    return reverse(fraction);
+}
 
-    return reversedFraction;
+
+bool readSign(std::ifstream *inFile, bool &sign) {
+    std::string line;
+    readline(&inFile, line);
+    if (line.length() == 2 && (line[0] == '+' || line[0] == '-')) {
+        sign = line[0] == '+';
+        return true;
+    }
+    return false;
 }
 
 
 // парсит строку, в которой должно находиться число LongNum, и при успехе преобразует строку в num
-bool readLongNum(std::string &line, LongNum &num) {
-    if ( isParsable(line) ) {
+bool readLongNum(std::ifstream *inFile, LongNum &num) {
+    std::string line;
+    readline(&inFile, line);
+    if (isParsable(line)) {
+        std::string element;
+
+        num.sign = line[0] != '-';
         std::string integer = getInteger(line);
         std::string fraction = getFraction(line);
-        if (integer.length() <= BUFF_SIZE && fraction.length() <= BUFF_SIZE) {
-            num.sign = (line[0] != '-');
-            return true;
+
+        num.integerSize = 0;
+        element = "";
+        for (int i = static_cast<int>(integer.length() - 1); i >= 0; i--) {
+            if (element.length() == CHAR_SIZE) {
+                element = reverse(element);
+                num.integer[num.integerSize] = std::stoi(element);
+                num.integerSize++;
+                element = "";
+            } else {
+                element += integer[i];
+            }
         }
+
+        num.fractionSize = 0;
+        element = "";
+        for (int i = static_cast<int>(fraction.length() - 1); i >= 0; i--) {
+            if (element.length() == CHAR_SIZE) {
+                element = reverse(element);
+                num.fraction[num.fractionSize] = std::stoi(element);
+                num.fractionSize++;
+                element = "";
+            } else {
+                element += integer[i];
+            }
+        }
+
+        return true;
     }
     return false;
 }

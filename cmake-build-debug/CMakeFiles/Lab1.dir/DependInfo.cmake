@@ -4,13 +4,13 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/cygdrive/c/Users/Andrewsha/CLionProjects/Lab1/constants.cpp" "/cygdrive/c/Users/Andrewsha/CLionProjects/Lab1/cmake-build-debug/CMakeFiles/Lab1.dir/constants.cpp.o"
-  "/cygdrive/c/Users/Andrewsha/CLionProjects/Lab1/longnum.cpp" "/cygdrive/c/Users/Andrewsha/CLionProjects/Lab1/cmake-build-debug/CMakeFiles/Lab1.dir/longnum.cpp.o"
-  "/cygdrive/c/Users/Andrewsha/CLionProjects/Lab1/main.cpp" "/cygdrive/c/Users/Andrewsha/CLionProjects/Lab1/cmake-build-debug/CMakeFiles/Lab1.dir/main.cpp.o"
-  "/cygdrive/c/Users/Andrewsha/CLionProjects/Lab1/messages.cpp" "/cygdrive/c/Users/Andrewsha/CLionProjects/Lab1/cmake-build-debug/CMakeFiles/Lab1.dir/messages.cpp.o"
-  "/cygdrive/c/Users/Andrewsha/CLionProjects/Lab1/parse.cpp" "/cygdrive/c/Users/Andrewsha/CLionProjects/Lab1/cmake-build-debug/CMakeFiles/Lab1.dir/parse.cpp.o"
+  "C:/Projects/lab1/constants.cpp" "C:/Projects/lab1/cmake-build-debug/CMakeFiles/Lab1.dir/constants.cpp.obj"
+  "C:/Projects/lab1/longnum.cpp" "C:/Projects/lab1/cmake-build-debug/CMakeFiles/Lab1.dir/longnum.cpp.obj"
+  "C:/Projects/lab1/main.cpp" "C:/Projects/lab1/cmake-build-debug/CMakeFiles/Lab1.dir/main.cpp.obj"
+  "C:/Projects/lab1/messages.cpp" "C:/Projects/lab1/cmake-build-debug/CMakeFiles/Lab1.dir/messages.cpp.obj"
+  "C:/Projects/lab1/parse.cpp" "C:/Projects/lab1/cmake-build-debug/CMakeFiles/Lab1.dir/parse.cpp.obj"
   )
-set(CMAKE_CXX_COMPILER_ID "GNU")
+set(CMAKE_CXX_COMPILER_ID "MSVC")
 
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
