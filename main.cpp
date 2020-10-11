@@ -10,6 +10,11 @@ int main() {
     std::ofstream outFile(OUT_PATH);
     bool isFileCorrect = inFile.is_open();
     LongNum sum = getLongNum();
+    LongNum num = getLongNum();
+
+    readLongNum(inFile, sum);
+    readLongNum(inFile, num);
+    std::cout << isLess(sum, num) << std::endl;
 
     if (!isFileCorrect) {
         outFile << fileNotFound(IN_PATH);
@@ -24,8 +29,7 @@ int main() {
                     outFile << invalidLongNum(index) << std::endl;
                     isFileCorrect = false;
                 } else if (isFileCorrect) {
-                    num.sign = !sign == !num.sign;
-                    sum = sumLongNum(sum, num);
+                    sum = (sign) ? sumLongNum(sum, num) : subLongNum(sum, num);
                 }
             } else if (!readSign(inFile, sign)) {
                 outFile << invalidSign(index) << std::endl;

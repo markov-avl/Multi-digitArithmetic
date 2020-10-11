@@ -6,12 +6,11 @@
 LongNum getLongNum() {
     LongNum num;
     num.sign = true;
-    num.integerSize = 0;
-    num.fractionSize = 0;
-    num.firstFractionDigitLength = 0;
-    for (int i = 0; i < DATA_SIZE; ++i) {
-        num.integer[i] = 0;
-        num.fraction[i] = 0;
+    num.size = 0;
+    num.lastIntUnit = 0;
+    num.lastFractUnit = 0;
+    for (unsigned char & i : num.data) {
+        i = 0;
     }
     return num;
 }
@@ -127,46 +126,44 @@ bool readLongNum(std::ifstream &inFile, LongNum &num) {
     }
     if (isParsable(line)) {
         std::string element;
+        int endPos;
         num = getLongNum();
 
         num.sign = line[0] != '-';
         std::string integer = getInteger(line);
         std::string fraction = getFraction(line);
 
-        num.integerSize = 0;
-        element = "";
-        for (int i = static_cast<int>(integer.length() - 1); i >= 0; --i) {
-            element += integer[i];
-            if (element.length() == 2 || i == 0) {
-                if (element == "00") {
-                    num.integer[num.integerSize] = ZERO;
-                } else {
-                    element = reverse(element);
-                    num.integer[num.integerSize] = std::stoi(element);
+        if (integer.length() > 0) {
+            endPos = static_cast<int>(integer.length()) - 1;
+            for (int i = 0; i <= endPos; ++i) {
+                element += integer[i];
+                if (element.length() == 2 || i == endPos) {
+                    num.data[num.size] = std::stoi(element);
+                    num.lastIntUnit = element.length();
+                    if (++num.size == DATA_SIZE) {
+                        break;
+                    }
+                    element = "";
                 }
-                if (++num.integerSize == DATA_SIZE) {
-                    break;
-                }
-                element = "";
             }
+        } else {
+            ++num.size;
+            num.lastIntUnit = 1;
         }
 
-        num.fractionSize = 0;
-        element = "";
-        for (int i = static_cast<int>(fraction.length() - 1); i >= 0; --i) {
-            element += fraction[i];
-            if (element.length() == 2 || i == 0) {
-                if (element == "00") {
-                    num.fraction[num.fractionSize] = ZERO;
-                } else {
-                    element = reverse(element);
-                    num.fraction[num.fractionSize] = std::stoi(element);
-                    num.firstFractionDigitLength = element.length();
+        if (num.size < DATA_SIZE - 1 && fraction.length() > 0) {
+            num.data[num.size++] = DOT;
+            endPos = static_cast<int>(fraction.length()) - 1;
+            for (int i = 0; i <= endPos; ++i) {
+                element += fraction[i];
+                if (element.length() == 2 || i == endPos) {
+                    num.data[num.size] = std::stoi(element);
+                    num.lastFractUnit = element.length();
+                    if (++num.size == DATA_SIZE) {
+                        break;
+                    }
+                    element = "";
                 }
-                if (++num.fractionSize == DATA_SIZE) {
-                    break;
-                }
-                element = "";
             }
         }
 
@@ -179,35 +176,31 @@ bool readLongNum(std::ifstream &inFile, LongNum &num) {
 // выводит число LongNum в читаемом виде в конец файла outFile
 void writeLongNum(std::ofstream &outFile, LongNum &num) {
     std::string strNum;
+    bool hasFract = false;
+    int unit;
+
     if (!num.sign) {
         strNum += "-";
     }
-    if (num.integerSize > 0) {
-        for (int i = num.integerSize - 1; i >= 0; --i) {
-            if (num.integer[i] != ZERO) {
-                if (i < num.integerSize - 1 && num.integer[i] < 8) {
+    if (num.size > 1) {
+        for (int i = 0; i < num.size; ++i) {
+            if (num.data[i] != DOT) {
+                if (hasFract) {
+                    unit = (i + 1 == num.size) ? num.lastFractUnit : 2;
+                } else {
+                    unit = (i + 1 == num.size || i + 1 < DATA_SIZE && num.data[i + 1] == DOT) ? num.lastIntUnit : 2;
+                }
+                if (unit == 2 && num.data[i] < 8) {
                     strNum += "0";
                 }
-                strNum += std::to_string(num.integer[i]);
+                strNum += std::to_string(num.data[i]);
             } else {
-                strNum += "00";
+                hasFract = true;
+                strNum += ".";
             }
         }
     } else {
-        strNum += "0";
-    }
-    if (num.fractionSize > 0) {
-        strNum += ".";
-        for (int i = num.fractionSize - 1; i >= 0; --i) {
-            if (num.fraction[i] != ZERO) {
-                if (num.firstFractionDigitLength == 2 && num.fraction[i] < 8) {
-                    strNum += "0";
-                }
-                strNum += std::to_string(num.fraction[i]);
-            } else {
-                strNum += "00";
-            }
-        }
+        strNum += std::to_string(num.data[0]);
     }
     outFile << strNum;
 }
@@ -220,4 +213,58 @@ LongNum sumLongNum(LongNum &a, LongNum &b) {
 
 LongNum subLongNum(LongNum &a, LongNum &b) {
     // написать
+}
+
+bool isEqual(LongNum &a, LongNum &b) {
+    int i = -1;
+    if (a.sign == b.sign && a.size == b.size && a.lastIntUnit == b.lastIntUnit && a.lastFractUnit == b.lastFractUnit) {
+        for (i = 0; i < a.size && a.data[i] == b.data[i]; ++i);
+    }
+    return i == a.size;
+}
+
+bool isLess(LongNum &a, LongNum &b) {
+    if (a.sign < b.sign) {
+        return true;
+    } else {
+        int aSize, bSize;
+        for (aSize = 0; aSize < a.size && a.data[aSize] != DOT; ++aSize);
+        for (bSize = 0; bSize < b.size && b.data[bSize] != DOT; ++bSize);
+        if (a.sign && aSize < bSize || !a.sign && aSize > bSize) {
+            return true;
+        } else {
+            int aUnit, bUnit;
+            for (int i = 0; i < aSize; ++i) {
+                aUnit = (i + 1 == aSize || i + 1 < DATA_SIZE && a.data[i + 1] == DOT) ? a.lastIntUnit : 2;
+                bUnit = (i + 1 == bSize || i + 1 < DATA_SIZE && b.data[i + 1] == DOT) ? b.lastIntUnit : 2;
+                if (a.sign && (a.data[i] == b.data[i] && aUnit < bUnit || a.data[i] < b.data[i] && aUnit <= bUnit) ||
+                        !a.sign && (a.data[i] == b.data[i] && aUnit > bUnit || a.data[i] > b.data[i] && aUnit >= bUnit)) {
+                    return true;
+                } else if (a.sign && a.data[i] > b.data[i] && aUnit >= bUnit ||
+                        !a.sign && a.data[i] < b.data[i] && aUnit <= bUnit) {
+                    return false;
+                }
+            }
+            if (aSize < a.size && bSize < b.size) {
+                if (a.sign && a.size - aSize < b.size - bSize || !a.sign && a.size - aSize > b.size - bSize) {
+                    return true;
+                } else {
+                    for (int i = aSize + 1; i < a.size; ++i) {
+                        aUnit = (i + 1 == a.size) ? a.lastFractUnit : 2;
+                        bUnit = (i + 1 == b.size) ? b.lastFractUnit : 2;
+                        if (a.sign && (a.data[i] == b.data[i] && aUnit > bUnit || a.data[i] < b.data[i] && aUnit <= bUnit) ||
+                                !a.sign && (a.data[i] == b.data[i] && aUnit < bUnit || a.data[i] > b.data[i] && aUnit >= bUnit)) {
+                            return true;
+                        } else if (a.sign && a.data[i] < b.data[i] && aUnit >= bUnit ||
+                                !a.sign && a.data[i] > b.data[i] && aUnit <= bUnit) {
+                            return false;
+                        }
+                    }
+                    return false;
+                }
+            } else {
+                return a.size < b.size;
+            }
+        }
+    }
 }
