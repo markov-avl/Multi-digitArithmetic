@@ -6,20 +6,20 @@
 
 
 int main() {
-    std::ifstream *inFile(IN_PATH);
+    std::ifstream inFile(IN_PATH);
     std::ofstream outFile(OUT_PATH);
     bool isFileCorrect = inFile.is_open();
+    LongNum sum = getLongNum();
 
     if (!isFileCorrect) {
         outFile << fileNotFound(IN_PATH);
     } else {
-        unsigned int index = 0;
+        unsigned int index = 1;
         bool sign = true;
         LongNum num;
-        LongNum sum = getLongNum();
 
         while (!inFile.eof()) {
-            if (index % 2 == 0) {
+            if (index % 2 == 1) {
                 if (!readLongNum(inFile, num)) {
                     outFile << invalidLongNum(index) << std::endl;
                     isFileCorrect = false;
@@ -31,19 +31,20 @@ int main() {
                 outFile << invalidSign(index) << std::endl;
                 isFileCorrect = false;
             }
-            index++;
+            ++index;
         }
 
-        if (index == 0) {
+        if (index == 1) {
             outFile << fileIsEmpty(IN_PATH);
-        } else if (index % 2 == 0 && isFileCorrect) {
+            isFileCorrect = false;
+        } else if (index % 2 == 1 && isFileCorrect) {
             outFile << invalidEndOfFile(IN_PATH);
-        } else {
-            writeLongNum(outFile, sum);
+            isFileCorrect = false;
         }
     }
 
     if (isFileCorrect) {
+        writeLongNum(outFile, sum);
         std::cout << successfullyCompleted(IN_PATH, OUT_PATH);
     } else {
         std::cout << unsuccessfullyCompleted(IN_PATH, OUT_PATH);
