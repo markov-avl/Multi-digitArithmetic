@@ -8,10 +8,14 @@ CMakeFiles/Lab1.dir/longnum.cpp.o: ../longnum.cpp
 CMakeFiles/Lab1.dir/longnum.cpp.o: ../longnum.h
 
 CMakeFiles/Lab1.dir/main.cpp.o: ../constants.h
-CMakeFiles/Lab1.dir/main.cpp.o: ../longnum.h
 CMakeFiles/Lab1.dir/main.cpp.o: ../main.cpp
 CMakeFiles/Lab1.dir/main.cpp.o: ../messages.h
+CMakeFiles/Lab1.dir/main.cpp.o: ../process.h
 
-CMakeFiles/Lab1.dir/messages.cpp.o: ../constants.h
 CMakeFiles/Lab1.dir/messages.cpp.o: ../messages.cpp
+
+CMakeFiles/Lab1.dir/process.cpp.o: ../constants.h
+CMakeFiles/Lab1.dir/process.cpp.o: ../longnum.h
+CMakeFiles/Lab1.dir/process.cpp.o: ../messages.h
+CMakeFiles/Lab1.dir/process.cpp.o: ../process.cpp
 

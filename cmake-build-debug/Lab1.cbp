@@ -101,6 +101,12 @@
 		<Unit filename="/cygdrive/c/Users/Andrewsha/CLionProjects/Lab1/messages.h">
 			<Option target="Lab1"/>
 		</Unit>
+		<Unit filename="/cygdrive/c/Users/Andrewsha/CLionProjects/Lab1/process.cpp">
+			<Option target="Lab1"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Andrewsha/CLionProjects/Lab1/process.h">
+			<Option target="Lab1"/>
+		</Unit>
 		<Unit filename="/cygdrive/c/Users/Andrewsha/CLionProjects/Lab1/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>

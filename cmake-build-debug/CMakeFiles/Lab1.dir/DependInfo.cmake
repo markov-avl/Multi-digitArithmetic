@@ -8,6 +8,7 @@ set(CMAKE_DEPENDS_CHECK_CXX
   "/cygdrive/c/Users/Andrewsha/CLionProjects/Lab1/longnum.cpp" "/cygdrive/c/Users/Andrewsha/CLionProjects/Lab1/cmake-build-debug/CMakeFiles/Lab1.dir/longnum.cpp.o"
   "/cygdrive/c/Users/Andrewsha/CLionProjects/Lab1/main.cpp" "/cygdrive/c/Users/Andrewsha/CLionProjects/Lab1/cmake-build-debug/CMakeFiles/Lab1.dir/main.cpp.o"
   "/cygdrive/c/Users/Andrewsha/CLionProjects/Lab1/messages.cpp" "/cygdrive/c/Users/Andrewsha/CLionProjects/Lab1/cmake-build-debug/CMakeFiles/Lab1.dir/messages.cpp.o"
+  "/cygdrive/c/Users/Andrewsha/CLionProjects/Lab1/process.cpp" "/cygdrive/c/Users/Andrewsha/CLionProjects/Lab1/cmake-build-debug/CMakeFiles/Lab1.dir/process.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

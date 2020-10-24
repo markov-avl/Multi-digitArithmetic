@@ -251,6 +251,33 @@ messages.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Lab1.dir/build.make CMakeFiles/Lab1.dir/messages.cpp.s
 .PHONY : messages.cpp.s
 
+process.o: process.cpp.o
+
+.PHONY : process.o
+
+# target to build an object file
+process.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Lab1.dir/build.make CMakeFiles/Lab1.dir/process.cpp.o
+.PHONY : process.cpp.o
+
+process.i: process.cpp.i
+
+.PHONY : process.i
+
+# target to preprocess a source file
+process.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Lab1.dir/build.make CMakeFiles/Lab1.dir/process.cpp.i
+.PHONY : process.cpp.i
+
+process.s: process.cpp.s
+
+.PHONY : process.s
+
+# target to generate assembly for a file
+process.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Lab1.dir/build.make CMakeFiles/Lab1.dir/process.cpp.s
+.PHONY : process.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -272,6 +299,9 @@ help:
 	@echo "... messages.o"
 	@echo "... messages.i"
 	@echo "... messages.s"
+	@echo "... process.o"
+	@echo "... process.i"
+	@echo "... process.s"
 .PHONY : help
 
 

@@ -9,14 +9,24 @@
 /cygdrive/c/Users/Andrewsha/CLionProjects/Lab1/constants.h
 
 /cygdrive/c/Users/Andrewsha/CLionProjects/Lab1/longnum.cpp
-fstream
--
 longnum.h
 /cygdrive/c/Users/Andrewsha/CLionProjects/Lab1/longnum.h
 
 /cygdrive/c/Users/Andrewsha/CLionProjects/Lab1/longnum.h
 iostream
 -
+fstream
+-
 constants.h
 /cygdrive/c/Users/Andrewsha/CLionProjects/Lab1/constants.h
+
+/cygdrive/c/Users/Andrewsha/CLionProjects/Lab1/messages.h
+iostream
+-
+
+/cygdrive/c/Users/Andrewsha/CLionProjects/Lab1/process.cpp
+longnum.h
+/cygdrive/c/Users/Andrewsha/CLionProjects/Lab1/longnum.h
+messages.h
+/cygdrive/c/Users/Andrewsha/CLionProjects/Lab1/messages.h
 
