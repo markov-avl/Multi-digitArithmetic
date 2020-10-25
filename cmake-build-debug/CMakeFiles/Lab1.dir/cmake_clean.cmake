@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/Lab1.dir/constants.cpp.o"
-  "CMakeFiles/Lab1.dir/longnum.cpp.o"
   "CMakeFiles/Lab1.dir/main.cpp.o"
   "CMakeFiles/Lab1.dir/messages.cpp.o"
   "CMakeFiles/Lab1.dir/process.cpp.o"

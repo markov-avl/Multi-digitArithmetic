@@ -16,14 +16,14 @@ int main() {
         isFileCorrect = processFile(inFile, outFile);
     }
 
+    inFile.close();
+    outFile.close();
+
     if (isFileCorrect) {
         std::cout << successfullyCompleted(IN_PATH, OUT_PATH);
     } else {
         std::cout << unsuccessfullyCompleted(IN_PATH, OUT_PATH);
     }
-
-    inFile.close();
-    outFile.close();
 
     return 0;
 }

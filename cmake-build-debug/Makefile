@@ -170,33 +170,6 @@ constants.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Lab1.dir/build.make CMakeFiles/Lab1.dir/constants.cpp.s
 .PHONY : constants.cpp.s
 
-longnum.o: longnum.cpp.o
-
-.PHONY : longnum.o
-
-# target to build an object file
-longnum.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Lab1.dir/build.make CMakeFiles/Lab1.dir/longnum.cpp.o
-.PHONY : longnum.cpp.o
-
-longnum.i: longnum.cpp.i
-
-.PHONY : longnum.i
-
-# target to preprocess a source file
-longnum.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Lab1.dir/build.make CMakeFiles/Lab1.dir/longnum.cpp.i
-.PHONY : longnum.cpp.i
-
-longnum.s: longnum.cpp.s
-
-.PHONY : longnum.s
-
-# target to generate assembly for a file
-longnum.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Lab1.dir/build.make CMakeFiles/Lab1.dir/longnum.cpp.s
-.PHONY : longnum.cpp.s
-
 main.o: main.cpp.o
 
 .PHONY : main.o
@@ -290,9 +263,6 @@ help:
 	@echo "... constants.o"
 	@echo "... constants.i"
 	@echo "... constants.s"
-	@echo "... longnum.o"
-	@echo "... longnum.i"
-	@echo "... longnum.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

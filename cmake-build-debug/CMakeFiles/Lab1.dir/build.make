@@ -90,22 +90,9 @@ CMakeFiles/Lab1.dir/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Lab1.dir/main.cpp.s"
 	/usr/bin/c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /cygdrive/c/Users/Andrewsha/CLionProjects/Lab1/main.cpp -o CMakeFiles/Lab1.dir/main.cpp.s
 
-CMakeFiles/Lab1.dir/longnum.cpp.o: CMakeFiles/Lab1.dir/flags.make
-CMakeFiles/Lab1.dir/longnum.cpp.o: ../longnum.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/cygdrive/c/Users/Andrewsha/CLionProjects/Lab1/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/Lab1.dir/longnum.cpp.o"
-	/usr/bin/c++.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Lab1.dir/longnum.cpp.o -c /cygdrive/c/Users/Andrewsha/CLionProjects/Lab1/longnum.cpp
-
-CMakeFiles/Lab1.dir/longnum.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Lab1.dir/longnum.cpp.i"
-	/usr/bin/c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /cygdrive/c/Users/Andrewsha/CLionProjects/Lab1/longnum.cpp > CMakeFiles/Lab1.dir/longnum.cpp.i
-
-CMakeFiles/Lab1.dir/longnum.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Lab1.dir/longnum.cpp.s"
-	/usr/bin/c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /cygdrive/c/Users/Andrewsha/CLionProjects/Lab1/longnum.cpp -o CMakeFiles/Lab1.dir/longnum.cpp.s
-
 CMakeFiles/Lab1.dir/messages.cpp.o: CMakeFiles/Lab1.dir/flags.make
 CMakeFiles/Lab1.dir/messages.cpp.o: ../messages.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/cygdrive/c/Users/Andrewsha/CLionProjects/Lab1/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/Lab1.dir/messages.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/cygdrive/c/Users/Andrewsha/CLionProjects/Lab1/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/Lab1.dir/messages.cpp.o"
 	/usr/bin/c++.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Lab1.dir/messages.cpp.o -c /cygdrive/c/Users/Andrewsha/CLionProjects/Lab1/messages.cpp
 
 CMakeFiles/Lab1.dir/messages.cpp.i: cmake_force
@@ -118,7 +105,7 @@ CMakeFiles/Lab1.dir/messages.cpp.s: cmake_force
 
 CMakeFiles/Lab1.dir/constants.cpp.o: CMakeFiles/Lab1.dir/flags.make
 CMakeFiles/Lab1.dir/constants.cpp.o: ../constants.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/cygdrive/c/Users/Andrewsha/CLionProjects/Lab1/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/Lab1.dir/constants.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/cygdrive/c/Users/Andrewsha/CLionProjects/Lab1/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/Lab1.dir/constants.cpp.o"
 	/usr/bin/c++.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Lab1.dir/constants.cpp.o -c /cygdrive/c/Users/Andrewsha/CLionProjects/Lab1/constants.cpp
 
 CMakeFiles/Lab1.dir/constants.cpp.i: cmake_force
@@ -131,7 +118,7 @@ CMakeFiles/Lab1.dir/constants.cpp.s: cmake_force
 
 CMakeFiles/Lab1.dir/process.cpp.o: CMakeFiles/Lab1.dir/flags.make
 CMakeFiles/Lab1.dir/process.cpp.o: ../process.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/cygdrive/c/Users/Andrewsha/CLionProjects/Lab1/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/Lab1.dir/process.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/cygdrive/c/Users/Andrewsha/CLionProjects/Lab1/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/Lab1.dir/process.cpp.o"
 	/usr/bin/c++.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Lab1.dir/process.cpp.o -c /cygdrive/c/Users/Andrewsha/CLionProjects/Lab1/process.cpp
 
 CMakeFiles/Lab1.dir/process.cpp.i: cmake_force
@@ -145,7 +132,6 @@ CMakeFiles/Lab1.dir/process.cpp.s: cmake_force
 # Object files for target Lab1
 Lab1_OBJECTS = \
 "CMakeFiles/Lab1.dir/main.cpp.o" \
-"CMakeFiles/Lab1.dir/longnum.cpp.o" \
 "CMakeFiles/Lab1.dir/messages.cpp.o" \
 "CMakeFiles/Lab1.dir/constants.cpp.o" \
 "CMakeFiles/Lab1.dir/process.cpp.o"
@@ -154,13 +140,12 @@ Lab1_OBJECTS = \
 Lab1_EXTERNAL_OBJECTS =
 
 Lab1.exe: CMakeFiles/Lab1.dir/main.cpp.o
-Lab1.exe: CMakeFiles/Lab1.dir/longnum.cpp.o
 Lab1.exe: CMakeFiles/Lab1.dir/messages.cpp.o
 Lab1.exe: CMakeFiles/Lab1.dir/constants.cpp.o
 Lab1.exe: CMakeFiles/Lab1.dir/process.cpp.o
 Lab1.exe: CMakeFiles/Lab1.dir/build.make
 Lab1.exe: CMakeFiles/Lab1.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/cygdrive/c/Users/Andrewsha/CLionProjects/Lab1/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking CXX executable Lab1.exe"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/cygdrive/c/Users/Andrewsha/CLionProjects/Lab1/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking CXX executable Lab1.exe"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/Lab1.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

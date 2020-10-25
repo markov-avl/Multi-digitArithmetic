@@ -3,4 +3,4 @@ project(Lab1)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(Lab1 main.cpp longnum.cpp longnum.h messages.h messages.cpp constants.h constants.cpp process.cpp process.h)
+add_executable(Lab1 main.cpp longnum.h messages.h messages.cpp constants.h constants.cpp process.cpp process.h)

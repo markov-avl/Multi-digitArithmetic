@@ -86,9 +86,6 @@
 		<Unit filename="/cygdrive/c/Users/Andrewsha/CLionProjects/Lab1/constants.h">
 			<Option target="Lab1"/>
 		</Unit>
-		<Unit filename="/cygdrive/c/Users/Andrewsha/CLionProjects/Lab1/longnum.cpp">
-			<Option target="Lab1"/>
-		</Unit>
 		<Unit filename="/cygdrive/c/Users/Andrewsha/CLionProjects/Lab1/longnum.h">
 			<Option target="Lab1"/>
 		</Unit>

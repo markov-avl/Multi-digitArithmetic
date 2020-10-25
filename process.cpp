@@ -1,6 +1,7 @@
 #include "longnum.h"
 #include "messages.h"
 
+
 bool readSign(std::ifstream &inFile, bool &sign) {
     std::string line;
     getline(inFile, line);
@@ -14,21 +15,28 @@ bool readSign(std::ifstream &inFile, bool &sign) {
     return false;
 }
 
+
 bool processFile(std::ifstream &inFile, std::ofstream &outFile) {
     bool isFileCorrect = true;
     bool sign = true;
     unsigned int index = 1;
     LongNum sum, num;
 
+    sum.readLongNum(inFile);
+    num.readLongNum(inFile);
+    sum.sumLongNum(num);
+    sum.writeLongNum(outFile);
+
     while ( !inFile.eof() ) {
         if (index % 2 == 1) {
-            if (!num.readLongNum(inFile)) {
+            if ( !num.readLongNum(inFile) ) {
                 outFile << invalidLongNum(index) << std::endl;
                 isFileCorrect = false;
             } else if (isFileCorrect) {
+                num.writeLongNum(outFile);
                 //sum = (sign) ? sumLongNum(sum, num) : subLongNum(sum, num);
             }
-        } else if (!readSign(inFile, sign)) {
+        } else if ( !readSign(inFile, sign) ) {
             outFile << invalidSign(index) << std::endl;
             isFileCorrect = false;
         }
