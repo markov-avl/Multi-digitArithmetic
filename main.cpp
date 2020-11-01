@@ -19,7 +19,7 @@ int main() {
 
         readLongNum(inFile, num1);
         readLongNum(inFile, num2);
-        sum = absoluteSum(num1, num2);
+        sum = absoluteSub(num1, num2);
         writeLongNum(outFile, sum);
 
 

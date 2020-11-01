@@ -116,6 +116,20 @@ void sumNumbers(unsigned char& sum, int& remainder, int a, int b) {
 }
 
 
+void subNumbers(unsigned char& sub, int& remainder, int a, int b) {
+    int mod, div, q1, q2;
+    mod = a % 10 - b % 10;
+    div = a / 10 - b / 10;
+    int k = mod % 8;
+    int n = mod / 8;
+    q2 = mod % 8 + (a > b ? 0 : 8);
+    q1 = (div + mod / 8 + (a > b ? 0 : 8 + div) ) % 8;
+    remainder = a > b ? 0 : -1;
+    sub = abs(q1 * 10 + q2);
+
+}
+
+
 // складывает целую и дробную части, игнорируя знак
 LongNum absoluteSum(LongNum& a, LongNum& b) {
     LongNum sum;
@@ -144,6 +158,39 @@ LongNum absoluteSum(LongNum& a, LongNum& b) {
 // вычитает целую и дробную части, игнорируя знак
 LongNum absoluteSub(LongNum& a, LongNum& b) {
     LongNum sub;
+    int index;
+    bool less;
+    int remainder = 0;
+    bool aSign = a.sign;
+    bool bSign = b.sign;
+
+    a.sign = true;
+    b.sign = true;
+    less = isLess(a, b);
+    a.sign = aSign;
+    b.sign = bSign;
+
+    LongNum& higher = less ? b : a;
+    LongNum& lower = less ? a : b;
+    sub.fractionSize = higher.fractionSize;
+
+    while (sub.fractionSize > 0 && higher.fraction[sub.fractionSize - 1] == lower.fraction[sub.fractionSize - 1]) {
+        sub.fraction[sub.fractionSize - 1] = 0;
+        --sub.fractionSize;
+    }
+    for (int i = sub.fractionSize - 1; i >= 0; --i) {
+        subNumbers(sub.fraction[i], remainder, a.fraction[i], b.fraction[i]);
+        index = i - 1;
+        while (index >= 0 && remainder == -1) {
+            subNumbers(sub.fraction[index], remainder, a.fraction[index], 1);
+            --index;
+        }
+        if (index < 0 && remainder == -1) {
+            break;
+        }
+    }
+
+    return sub;
 }
 
 
