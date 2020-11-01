@@ -1,41 +1,27 @@
 #include <fstream>
 #include "longnum.h"
 
-
-// приводит число LongNum к виду "0", а также избавляется от мусора в массивах
-LongNum getLongNum() {
-    LongNum num;
-    num.sign = true;
-    num.integerSize = 0;
-    num.fractionSize = 0;
-    num.firstFractionDigitLength = 0;
-    for (int i = 0; i < DATA_SIZE; ++i) {
-        num.integer[i] = 0;
-        num.fraction[i] = 0;
+bool readSign(std::ifstream &inFile, bool &sign) {
+    std::string line;
+    getline(inFile, line);
+    if (line.length() == 2 && (line[0] == '+' || line[0] == '-')) {
+        sign = line[0] == '+';
+        return true;
     }
-    return num;
+    return false;
 }
 
 
-bool isDigit(char a, bool zero = true) {
-    if (zero) {
+// проверка, является ли символ числом восьмеричной СС
+bool isDigit(char a, bool withZero = true) {
+    if (withZero) {
         return a >= '0' && a <= '7';
     } else {
         return a >= '1' && a <= '7';
     }
 }
 
-
-std::string reverse(std::string &line) {
-    std::string reversed;
-    for (int i = static_cast<int>(line.length()) - 1; i >= 0; --i) {
-        reversed += line[i];
-    }
-    return reversed;
-}
-
-
-// проверяет, удовлетворяет ли строка синтаксису БНФ записи
+// проверка, удовлетворяет ли строка синтаксису БНФ записи
 bool isParsable(std::string &line) {
     unsigned int len = line.length();
     unsigned int i;
@@ -60,6 +46,14 @@ bool isParsable(std::string &line) {
     return i == len && line[i - 1] != '-' && line[i - 1] != '.' && isDigit(line[i - 1]);
 }
 
+// разворачивает строку ("4321" -> "1234")
+std::string reverse(std::string &line) {
+    std::string reversed;
+    for (int i = static_cast<int>(line.length()) - 1; i >= 0; --i) {
+        reversed += line[i];
+    }
+    return reversed;
+}
 
 // возвращает целую часть числа, отбрасывая незначащие нули
 std::string getInteger(std::string &line) {
@@ -67,7 +61,7 @@ std::string getInteger(std::string &line) {
     bool hasSignificantDigit = false;
     unsigned int len = line.length();
     int startPosition = (line[0] == '-') ? 1 : 0;
-    int dotPosition = static_cast<int>(line.find('.'));
+    int dotPosition = static_cast<int>( line.find('.') );
     int endPosition = (dotPosition > -1) ? dotPosition - 1: static_cast<int>(len) - 1;
 
     // сохраняет в integer только значащие цифры
@@ -82,7 +76,6 @@ std::string getInteger(std::string &line) {
 
     return integer;
 }
-
 
 // возвращает дробную часть числа, отбрасывая незначащие нули
 std::string getFraction(std::string &line) {
@@ -107,17 +100,6 @@ std::string getFraction(std::string &line) {
 }
 
 
-bool readSign(std::ifstream &inFile, bool &sign) {
-    std::string line;
-    getline(inFile, line);
-    if (line.length() == 2 && (line[0] == '+' || line[0] == '-')) {
-        sign = line[0] == '+';
-        return true;
-    }
-    return false;
-}
-
-
 // парсит строку, в которой должно находиться число LongNum, и при успехе преобразует строку в num
 bool readLongNum(std::ifstream &inFile, LongNum &num) {
     std::string line;
@@ -125,48 +107,40 @@ bool readLongNum(std::ifstream &inFile, LongNum &num) {
     if (static_cast<int>(line.find('\r')) > -1) {
         line.erase(line.length() - 1);
     }
-    if (isParsable(line)) {
+    if ( isParsable(line) ) {
         std::string element;
-        num = getLongNum();
 
         num.sign = line[0] != '-';
-        std::string integer = getInteger(line);
-        std::string fraction = getFraction(line);
+        std::string integerString = getInteger(line);
+        std::string fractionString = getFraction(line);
+        int integerLength = static_cast<int>( integerString.length() );
+        int fractionLength = static_cast<int>( fractionString.length() );
 
         num.integerSize = 0;
         element = "";
-        for (int i = static_cast<int>(integer.length() - 1); i >= 0; --i) {
-            element += integer[i];
+        for (int i = integerLength - 1; i >= 0; --i) {
+            element += integerString[i];
             if (element.length() == 2 || i == 0) {
-                if (element == "00") {
-                    num.integer[num.integerSize] = ZERO;
-                } else {
-                    element = reverse(element);
-                    num.integer[num.integerSize] = std::stoi(element);
-                }
+                element = reverse(element);
+                num.integer[num.integerSize] = std::stoi(element);
                 if (++num.integerSize == DATA_SIZE) {
                     break;
                 }
-                element = "";
+                element.clear();
             }
         }
 
         num.fractionSize = 0;
         element = "";
-        for (int i = static_cast<int>(fraction.length() - 1); i >= 0; --i) {
-            element += fraction[i];
+        for (int i = 0; i < fractionLength; ++i) {
+            element += fractionString[i];
             if (element.length() == 2 || i == 0) {
-                if (element == "00") {
-                    num.fraction[num.fractionSize] = ZERO;
-                } else {
-                    element = reverse(element);
-                    num.fraction[num.fractionSize] = std::stoi(element);
-                    num.firstFractionDigitLength = element.length();
-                }
+                element = reverse(element);
+                num.fraction[num.fractionSize] = std::stoi(element);
                 if (++num.fractionSize == DATA_SIZE) {
                     break;
                 }
-                element = "";
+                element.clear();
             }
         }
 
@@ -175,27 +149,23 @@ bool readLongNum(std::ifstream &inFile, LongNum &num) {
     return false;
 }
 
-
 // выводит число LongNum в читаемом виде в конец файла outFile
 void writeLongNum(std::ofstream &outFile, LongNum &num) {
-    std::string strNum;
     if (!num.sign) {
-        strNum += "-";
+        outFile << '-';
     }
+
     if (num.integerSize > 0) {
         for (int i = num.integerSize - 1; i >= 0; --i) {
-            if (num.integer[i] != ZERO) {
-                if (i < num.integerSize - 1 && num.integer[i] < 8) {
-                    strNum += "0";
-                }
-                strNum += std::to_string(num.integer[i]);
-            } else {
-                strNum += "00";
+            if (num.integer[i] < 10 && i != num.integerSize - 1) {
+                outFile << '0';
             }
+            outFile << num.integer[i];
         }
     } else {
-        strNum += "0";
+        outFile << '0';
     }
+    
     if (num.fractionSize > 0) {
         strNum += ".";
         for (int i = num.fractionSize - 1; i >= 0; --i) {
@@ -214,7 +184,7 @@ void writeLongNum(std::ofstream &outFile, LongNum &num) {
 
 
 LongNum sumLongNum(LongNum &a, LongNum &b) {
-    return b;
+    // написать
 }
 
 
