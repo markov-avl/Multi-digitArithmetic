@@ -98,23 +98,23 @@ std::string getFraction(std::string& line) {
 
 
 void sumNumbers(unsigned char& sum, int& remainder, int a, int b) {
-    int mod, div, q1, q2;
-    mod = a % 10 + b % 10;
-    div = a / 10 + b / 10;
-    q2 = (mod + remainder) % 8;
-    q1 = (div + mod / 8) % 8;
-    remainder = (div + mod / 8) / 8;
+    int units, tens, q1, q2;
+    units = a % 10 + b % 10 + remainder;
+    tens = a / 10 + b / 10 + (units >= 8 ? 1 : 0);
+    q2 = units % 8;
+    q1 = tens % 8;
+    remainder = tens >= 8 ? 1 : 0;
     sum = q1 * 10 + q2;
 }
 
 
 void subNumbers(unsigned char& sub, int& remainder, int a, int b) {
-    int mod, div, q1, q2;
-    mod = a % 10 - (b - remainder) % 10;
-    div = a / 10 - (b - remainder) / 10;
-    q2 = (mod >= 0 ? 0 : 8) + mod;
-    q1 = (a >= b && mod >= 0 ? 0 : 8) + div + (mod >= 0 ? 0 : -1);
-    remainder = a >= b && mod >= 0 ? 0 : -1;
+    int units, tens, q1, q2;
+    units = a % 10 - b % 10 + remainder;
+    tens = a / 10 - b / 10 - (units >= 0 ? 0 : 1);
+    q2 = units >= 0 ? units : 8 + units;
+    q1 = tens >= 0 ? tens : 8 + tens;
+    remainder = tens >= 0 ? 0 : -1;
     sub = q1 * 10 + q2;
 }
 

@@ -7,7 +7,10 @@
 bool readSign(std::ifstream& inFile, bool& sign) {
     std::string line;
     getline(inFile, line);
-    if (line.length() == 2 && (line[0] == '+' || line[0] == '-') ) {
+    if (static_cast<int>( line.find('\r') ) > -1) {
+        line.erase(line.length() - 1);
+    }
+    if (line.length() == 1 && (line[0] == '+' || line[0] == '-') ) {
         sign = line[0] == '+';
         return true;
     }
@@ -33,7 +36,11 @@ bool process(std::ifstream& inFile, std::ofstream& outFile) {
                     isFileCorrect = false;
                 }
                 if (isFileCorrect) {
-                    sum = sign ? sumLongNum(sum, num) : subLongNum(sum, num);
+                    if (index == 1) {
+                        sum = num;
+                    } else {
+                        sum = sign ? sumLongNum(sum, num) : subLongNum(sum, num);
+                    }
                 }
             } else if ( !readSign(inFile, sign) ) {
                 outFile << invalidSign(index) << std::endl;
