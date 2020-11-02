@@ -118,15 +118,12 @@ void sumNumbers(unsigned char& sum, int& remainder, int a, int b) {
 
 void subNumbers(unsigned char& sub, int& remainder, int a, int b) {
     int mod, div, q1, q2;
-    mod = a % 10 - b % 10;
-    div = a / 10 - b / 10;
-    int k = mod % 8;
-    int n = mod / 8;
-    q2 = mod % 8 + (a > b ? 0 : 8);
-    q1 = (div + mod / 8 + (a > b ? 0 : 8 + div) ) % 8;
-    remainder = a > b ? 0 : -1;
-    sub = abs(q1 * 10 + q2);
-
+    mod = a % 10 - (b - remainder) % 10;
+    div = a / 10 - (b - remainder) / 10;
+    q2 = (mod >= 0 ? 0 : 8) + mod;
+    q1 = (a >= b ? 0 : 8) + div + (mod >= 0 ? 0 : -1);
+    remainder = a >= b ? 0 : -1;
+    sub = q1 * 10 + q2;
 }
 
 
@@ -158,36 +155,33 @@ LongNum absoluteSum(LongNum& a, LongNum& b) {
 // вычитает целую и дробную части, игнорируя знак
 LongNum absoluteSub(LongNum& a, LongNum& b) {
     LongNum sub;
-    int index;
-    bool less;
     int remainder = 0;
-    bool aSign = a.sign;
-    bool bSign = b.sign;
 
+    sub.integerSize = a.integerSize > b.integerSize ? a.integerSize : b.integerSize;
+    sub.fractionSize = a.fractionSize > b.fractionSize ? a.fractionSize : b.fractionSize;
+
+    bool aSign = a.sign;
+    bool bSign = a.sign;
     a.sign = true;
     b.sign = true;
-    less = isLess(a, b);
+    bool less = isLess(a, b);
     a.sign = aSign;
     b.sign = bSign;
 
     LongNum& higher = less ? b : a;
     LongNum& lower = less ? a : b;
-    sub.fractionSize = higher.fractionSize;
 
     while (sub.fractionSize > 0 && higher.fraction[sub.fractionSize - 1] == lower.fraction[sub.fractionSize - 1]) {
-        sub.fraction[sub.fractionSize - 1] = 0;
-        --sub.fractionSize;
+        sub.fraction[--sub.fractionSize] = 0;
     }
     for (int i = sub.fractionSize - 1; i >= 0; --i) {
-        subNumbers(sub.fraction[i], remainder, a.fraction[i], b.fraction[i]);
-        index = i - 1;
-        while (index >= 0 && remainder == -1) {
-            subNumbers(sub.fraction[index], remainder, a.fraction[index], 1);
-            --index;
-        }
-        if (index < 0 && remainder == -1) {
-            break;
-        }
+        subNumbers(sub.fraction[i], remainder, higher.fraction[i], lower.fraction[i]);
+    }
+    for (int i = 0; i < sub.integerSize; ++i) {
+        subNumbers(sub.integer[i], remainder, higher.integer[i], lower.integer[i]);
+    }
+    while (sub.integerSize > 0 && sub.integer[sub.integerSize - 1] == 0) {
+        sub.integer[--sub.integerSize] = 0;
     }
 
     return sub;
