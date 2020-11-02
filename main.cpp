@@ -4,33 +4,36 @@
 #include "longnum.h"
 
 
-int main() {
-    std::ifstream inFile(IN_PATH);
-    std::ofstream outFile(OUT_PATH);
+bool readSign(std::ifstream& inFile, bool& sign) {
+    std::string line;
+    getline(inFile, line);
+    if (line.length() == 2 && (line[0] == '+' || line[0] == '-') ) {
+        sign = line[0] == '+';
+        return true;
+    }
+    return false;
+}
+
+
+bool process(std::ifstream& inFile, std::ofstream& outFile) {
     bool isFileCorrect = inFile.is_open();
 
-    if ( !inFile.is_open() ) {
+    if (!isFileCorrect) {
         outFile << fileNotFound(IN_PATH);
-        isFileCorrect = false;
     } else {
-        unsigned int index = 1;
+        LongNum sum;
         bool sign = true;
-        LongNum num1, num2, sum;
-
-        readLongNum(inFile, num1);
-        readLongNum(inFile, num2);
-        sum = absoluteSub(num1, num2);
-        writeLongNum(outFile, sum);
-
+        unsigned int index = 1;
 
         while ( !inFile.eof() ) {
             if (index % 2 == 1) {
-                if ( !readLongNum(inFile, num1) ) {
+                LongNum num;
+                if ( !readLongNum(inFile, num) ) {
                     outFile << invalidLongNum(index) << std::endl;
                     isFileCorrect = false;
-                } else if (isFileCorrect) {
-                    writeLongNum(outFile, num1);
-                    sum = num1.sign ? sumLongNum(sum, num1) : subLongNum(sum, num1);
+                }
+                if (isFileCorrect) {
+                    sum = sign ? sumLongNum(sum, num) : subLongNum(sum, num);
                 }
             } else if ( !readSign(inFile, sign) ) {
                 outFile << invalidSign(index) << std::endl;
@@ -45,18 +48,27 @@ int main() {
         } else if (index % 2 == 1 && isFileCorrect) {
             outFile << invalidEndOfFile(IN_PATH);
             isFileCorrect = false;
-        } else {
+        } else if (isFileCorrect) {
             writeLongNum(outFile, sum);
         }
     }
 
+    return isFileCorrect;
+}
+
+
+int main() {
+    std::ifstream inFile(IN_PATH);
+    std::ofstream outFile(OUT_PATH);
+    bool isSuccessfullyCompleted = process(inFile, outFile);
+
     inFile.close();
     outFile.close();
 
-    if (isFileCorrect) {
-        std::cout << successfullyCompleted(IN_PATH, OUT_PATH);
+    if (isSuccessfullyCompleted) {
+        std::cout << successfullyCompleted(IN_PATH, OUT_PATH) << std::endl;
     } else {
-        std::cout << unsuccessfullyCompleted(IN_PATH, OUT_PATH);
+        std::cout << unsuccessfullyCompleted(IN_PATH, OUT_PATH) << std::endl;
     }
 
     return 0;

@@ -2,17 +2,6 @@
 #include "longnum.h"
 
 
-bool readSign(std::ifstream& inFile, bool& sign) {
-    std::string line;
-    getline(inFile, line);
-    if (line.length() == 2 && (line[0] == '+' || line[0] == '-') ) {
-        sign = line[0] == '+';
-        return true;
-    }
-    return false;
-}
-
-
 // проверка, является ли символ числом восьмеричной СС
 bool isDigit(char a, bool withZero = true) {
     if (withZero) {
@@ -77,6 +66,9 @@ std::string getInteger(std::string& line) {
             integer += line[i];
         }
     }
+    if (integer.length() == 0) {
+        integer = '0';
+    }
 
     return integer;
 }
@@ -121,13 +113,13 @@ void subNumbers(unsigned char& sub, int& remainder, int a, int b) {
     mod = a % 10 - (b - remainder) % 10;
     div = a / 10 - (b - remainder) / 10;
     q2 = (mod >= 0 ? 0 : 8) + mod;
-    q1 = (a >= b ? 0 : 8) + div + (mod >= 0 ? 0 : -1);
-    remainder = a >= b ? 0 : -1;
+    q1 = (a >= b && mod >= 0 ? 0 : 8) + div + (mod >= 0 ? 0 : -1);
+    remainder = a >= b && mod >= 0 ? 0 : -1;
     sub = q1 * 10 + q2;
 }
 
 
-// складывает целую и дробную части, игнорируя знак
+// складывает целую и дробную части, игнорируя знак (то есть вычитает по модулю)
 LongNum absoluteSum(LongNum& a, LongNum& b) {
     LongNum sum;
     int remainder = 0;
@@ -152,7 +144,7 @@ LongNum absoluteSum(LongNum& a, LongNum& b) {
 }
 
 
-// вычитает целую и дробную части, игнорируя знак
+// вычитает целую и дробную части, игнорируя знак (то есть складывает по модулю)
 LongNum absoluteSub(LongNum& a, LongNum& b) {
     LongNum sub;
     int remainder = 0;
@@ -160,16 +152,9 @@ LongNum absoluteSub(LongNum& a, LongNum& b) {
     sub.integerSize = a.integerSize > b.integerSize ? a.integerSize : b.integerSize;
     sub.fractionSize = a.fractionSize > b.fractionSize ? a.fractionSize : b.fractionSize;
 
-    bool aSign = a.sign;
-    bool bSign = a.sign;
-    a.sign = true;
-    b.sign = true;
-    bool less = isLess(a, b);
-    a.sign = aSign;
-    b.sign = bSign;
-
-    LongNum& higher = less ? b : a;
+    bool less = isLess(a, b, true);
     LongNum& lower = less ? a : b;
+    LongNum& higher = less ? b : a;
 
     while (sub.fractionSize > 0 && higher.fraction[sub.fractionSize - 1] == lower.fraction[sub.fractionSize - 1]) {
         sub.fraction[--sub.fractionSize] = 0;
@@ -180,7 +165,7 @@ LongNum absoluteSub(LongNum& a, LongNum& b) {
     for (int i = 0; i < sub.integerSize; ++i) {
         subNumbers(sub.integer[i], remainder, higher.integer[i], lower.integer[i]);
     }
-    while (sub.integerSize > 0 && sub.integer[sub.integerSize - 1] == 0) {
+    while (sub.integerSize > 1 && sub.integer[sub.integerSize - 1] == 0) {
         sub.integer[--sub.integerSize] = 0;
     }
 
@@ -240,15 +225,11 @@ void writeLongNum(std::ofstream& outFile, LongNum& num) {
     if (!num.sign) {
         outFile << '-';
     }
-    if (num.integerSize > 0) {
-        for (int i = num.integerSize - 1; i >= 0; --i) {
-            if (num.integer[i] < 10 && i < num.integerSize - 1) {
-                outFile << '0';
-            }
-            outFile << static_cast<short>(num.integer[i]);
+    for (int i = num.integerSize - 1; i >= 0; --i) {
+        if (num.integer[i] < 10 && i < num.integerSize - 1) {
+            outFile << '0';
         }
-    } else {
-        outFile << '0';
+        outFile << static_cast<short>(num.integer[i]);
     }
     if (num.fractionSize > 0) {
         outFile << '.';
@@ -267,8 +248,8 @@ void writeLongNum(std::ofstream& outFile, LongNum& num) {
 }
 
 
-bool isEqual(LongNum& a, LongNum& b) {
-    if (a.sign == b.sign && a.integerSize == b.integerSize && a.fractionSize == b.fractionSize) {
+bool isEqual(LongNum& a, LongNum& b, bool abs) {
+    if ( (a.sign == b.sign || abs) && a.integerSize == b.integerSize && a.fractionSize == b.fractionSize) {
         for (int i = a.integerSize - 1; i >= 0; --i) {
             if (a.integer[i] != b.integer[i]) {
                 return false;
@@ -285,10 +266,10 @@ bool isEqual(LongNum& a, LongNum& b) {
 }
 
 
-bool isLess(LongNum& a, LongNum& b) {
-    if (a.sign == b.sign) {
-        LongNum& lower = a.sign ? a : b;
-        LongNum& higher = a.sign ? b : a;
+bool isLess(LongNum& a, LongNum& b, bool abs) {
+    if (a.sign == b.sign || abs) {
+        LongNum& lower = a.sign || abs ? a : b;
+        LongNum& higher = a.sign || abs ? b : a;
         if (lower.integerSize == higher.integerSize) {
             for (int i = lower.integerSize - 1; i >= 0; --i) {
                 if (lower.integer[i] != higher.integer[i]) {
@@ -312,10 +293,31 @@ bool isLess(LongNum& a, LongNum& b) {
 
 LongNum sumLongNum(LongNum& a, LongNum& b) {
     LongNum sum;
-
+    if (a.sign == b.sign) {
+        sum = absoluteSum(a, b);
+        sum.sign = a.sign;
+    } else {
+        if ( !isEqual(a, b, true) ) {
+            bool less = isLess(a, b, true);
+            sum = less ? absoluteSub(b, a) : absoluteSub(a, b);
+            sum.sign = less ? b.sign : a.sign;
+        }
+    }
+    return sum;
 }
 
 
 LongNum subLongNum(LongNum& a, LongNum& b) {
-    // написать
+    LongNum sub;
+    if (a.sign == b.sign) {
+        if ( !isEqual(a, b, true) ) {
+            bool less = isLess(a, b, true);
+            sub = less ? absoluteSub(b, a) : absoluteSub(a, b);
+            sub.sign = less ? !b.sign : a.sign;
+        }
+    } else {
+        sub = absoluteSum(a, b);
+        sub.sign = a.sign;
+    }
+    return sub;
 }
