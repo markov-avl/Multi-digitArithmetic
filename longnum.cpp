@@ -1,14 +1,11 @@
 #include <fstream>
 #include "longnum.h"
+#include "messages.h"
 
 
 // проверка, является ли символ числом восьмеричной СС
 bool isDigit(char a, bool withZero = true) {
-    if (withZero) {
-        return a >= '0' && a <= '7';
-    } else {
-        return a >= '1' && a <= '7';
-    }
+    return (withZero ? a >= '0' && a <= '7' : a >= '1' && a <= '7');
 }
 
 
@@ -59,15 +56,12 @@ std::string getInteger(std::string& line) {
 
     // сохраняет в integer только значащие цифры
     for (int i = startPosition; i <= endPosition; ++i) {
-        if (!hasSignificantDigit && isDigit(line[i], false) ) {
+        if (!hasSignificantDigit && isDigit(line[i], false) || i == endPosition) {
             hasSignificantDigit = true;
         }
         if (hasSignificantDigit) {
             integer += line[i];
         }
-    }
-    if (integer.length() == 0) {
-        integer = '0';
     }
 
     return integer;
@@ -97,6 +91,7 @@ std::string getFraction(std::string& line) {
 }
 
 
+// если remainder получился 1, тогда произошло переполнение десятков и единиц в сумме
 void sumNumbers(unsigned char& sum, int& remainder, int a, int b) {
     int units, tens, q1, q2;
     units = a % 10 + b % 10 + remainder;
@@ -108,6 +103,7 @@ void sumNumbers(unsigned char& sum, int& remainder, int a, int b) {
 }
 
 
+// если remainder получился -1, тогда произошла нехватка десятков и единиц в разности
 void subNumbers(unsigned char& sub, int& remainder, int a, int b) {
     int units, tens, q1, q2;
     units = a % 10 - b % 10 + remainder;
@@ -120,7 +116,7 @@ void subNumbers(unsigned char& sub, int& remainder, int a, int b) {
 
 
 // складывает целую и дробную части, игнорируя знак (то есть вычитает по модулю)
-LongNum absoluteSum(LongNum& a, LongNum& b) {
+LongNum absSum(LongNum& a, LongNum& b) {
     LongNum sum;
     int remainder = 0;
 
@@ -130,9 +126,6 @@ LongNum absoluteSum(LongNum& a, LongNum& b) {
     for (int i = sum.fractionSize - 1; i >= 0; --i) {
         sumNumbers(sum.fraction[i], remainder, a.fraction[i], b.fraction[i]);
     }
-    if (sum.fractionSize > 0 && sum.fraction[sum.fractionSize - 1] == 0) {
-        --sum.fractionSize;
-    }
     for (int i = 0; i < sum.integerSize; ++i) {
         sumNumbers(sum.integer[i], remainder, a.integer[i], b.integer[i]);
     }
@@ -140,12 +133,20 @@ LongNum absoluteSum(LongNum& a, LongNum& b) {
         sum.integer[sum.integerSize++] = remainder;
     }
 
+    // удаление незначащих нулей, которые могут образоваться
+    while (sum.integerSize > 1 && sum.integer[sum.integerSize - 1] == 0) {
+        --sum.integerSize;
+    }
+    while (sum.fractionSize > 0 && sum.fraction[sum.fractionSize - 1] == 0) {
+        --sum.fractionSize;
+    }
+
     return sum;
 }
 
 
 // вычитает целую и дробную части, игнорируя знак (то есть складывает по модулю)
-LongNum absoluteSub(LongNum& a, LongNum& b) {
+LongNum absSub(LongNum& a, LongNum& b) {
     LongNum sub;
     int remainder = 0;
 
@@ -165,8 +166,13 @@ LongNum absoluteSub(LongNum& a, LongNum& b) {
     for (int i = 0; i < sub.integerSize; ++i) {
         subNumbers(sub.integer[i], remainder, higher.integer[i], lower.integer[i]);
     }
+
+    // удаление незначащих нулей, которые могут образоваться
     while (sub.integerSize > 1 && sub.integer[sub.integerSize - 1] == 0) {
-        sub.integer[--sub.integerSize] = 0;
+        --sub.integerSize;
+    }
+    while (sub.fractionSize > 0 && sub.fraction[sub.fractionSize - 1] == 0) {
+        --sub.fractionSize;
     }
 
     return sub;
@@ -182,6 +188,7 @@ bool readLongNum(std::ifstream& inFile, LongNum& num) {
     }
     if ( isParsable(line) ) {
         std::string element;
+        bool isOverflowed = false;
 
         num.sign = line[0] != '-';
         std::string integerString = getInteger(line);
@@ -191,18 +198,23 @@ bool readLongNum(std::ifstream& inFile, LongNum& num) {
 
         num.integerSize = 0;
         element = "";
-        for (int i = integerLength - 1; i >= 0 && num.integerSize < DATA_SIZE; --i) {
+        for (int i = integerLength - 1; i >= 0; --i) {
             element += integerString[i];
             if (element.length() == 2 || i == 0) {
                 element = reverse(element);
                 num.integer[num.integerSize++] = std::stoi(element);
                 element.clear();
+                if (num.integerSize == DATA_SIZE) {
+                    std::cout << dataOverflowed() << std::endl;
+                    isOverflowed = true;
+                    break;
+                }
             }
         }
 
         num.fractionSize = 0;
         element = "";
-        for (int i = 0; i < fractionLength && num.fractionSize < DATA_SIZE; ++i) {
+        for (int i = 0; i < fractionLength; ++i) {
             element += fractionString[i];
             if (element.length() == 2 || i == fractionLength - 1) {
                 num.fraction[num.fractionSize] = std::stoi(element);
@@ -211,10 +223,14 @@ bool readLongNum(std::ifstream& inFile, LongNum& num) {
                 }
                 ++num.fractionSize;
                 element.clear();
+                if (num.fractionSize == DATA_SIZE && !isOverflowed) {
+                    std::cout << dataOverflowed() << std::endl;
+                    break;
+                }
             }
         }
 
-        return true;
+        return !(!num.sign && num.integerSize == 1 && num.integer[0] == 0 && num.fractionSize == 0);
     }
     return false;
 }
@@ -294,12 +310,12 @@ bool isLess(LongNum& a, LongNum& b, bool abs) {
 LongNum sumLongNum(LongNum& a, LongNum& b) {
     LongNum sum;
     if (a.sign == b.sign) {
-        sum = absoluteSum(a, b);
+        sum = absSum(a, b);
         sum.sign = a.sign;
     } else {
         if ( !isEqual(a, b, true) ) {
             bool less = isLess(a, b, true);
-            sum = less ? absoluteSub(b, a) : absoluteSub(a, b);
+            sum = less ? absSub(b, a) : absSub(a, b);
             sum.sign = less ? b.sign : a.sign;
         }
     }
@@ -312,11 +328,11 @@ LongNum subLongNum(LongNum& a, LongNum& b) {
     if (a.sign == b.sign) {
         if ( !isEqual(a, b, true) ) {
             bool less = isLess(a, b, true);
-            sub = less ? absoluteSub(b, a) : absoluteSub(a, b);
+            sub = less ? absSub(b, a) : absSub(a, b);
             sub.sign = less ? !b.sign : a.sign;
         }
     } else {
-        sub = absoluteSum(a, b);
+        sub = absSum(a, b);
         sub.sign = a.sign;
     }
     return sub;

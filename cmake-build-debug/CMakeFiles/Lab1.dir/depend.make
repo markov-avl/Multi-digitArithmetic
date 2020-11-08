@@ -6,6 +6,7 @@ CMakeFiles/Lab1.dir/constants.cpp.o: ../constants.cpp
 CMakeFiles/Lab1.dir/longnum.cpp.o: ../constants.h
 CMakeFiles/Lab1.dir/longnum.cpp.o: ../longnum.cpp
 CMakeFiles/Lab1.dir/longnum.cpp.o: ../longnum.h
+CMakeFiles/Lab1.dir/longnum.cpp.o: ../messages.h
 
 CMakeFiles/Lab1.dir/main.cpp.o: ../constants.h
 CMakeFiles/Lab1.dir/main.cpp.o: ../longnum.h

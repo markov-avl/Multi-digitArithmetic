@@ -2,10 +2,6 @@
 #include <fstream>
 #include "constants.h"
 
-#ifndef LAB1_LONGNUM_H
-#define LAB1_LONGNUM_H
-
-
 typedef struct LongNum {
     bool sign;
     unsigned char integer[DATA_SIZE]{};
@@ -25,6 +21,3 @@ bool isEqual(LongNum& a, LongNum& b, bool abs = false);
 bool isLess(LongNum& a, LongNum& b, bool abs = false);
 LongNum sumLongNum(LongNum& a, LongNum& b);
 LongNum subLongNum(LongNum& a, LongNum& b);
-
-
-#endif
