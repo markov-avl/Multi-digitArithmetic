@@ -116,7 +116,7 @@ void subNumbers(unsigned char& sub, int& remainder, int a, int b) {
 
 
 // складывает целую и дробную части, игнорируя знак (то есть вычитает по модулю)
-LongNum absSum(LongNum& a, LongNum& b) {
+LongNum absSum(LongNum& a, LongNum& b, int& responseCode) {
     LongNum sum;
     int remainder = 0;
 
@@ -129,8 +129,16 @@ LongNum absSum(LongNum& a, LongNum& b) {
     for (int i = 0; i < sum.integerSize; ++i) {
         sumNumbers(sum.integer[i], remainder, a.integer[i], b.integer[i]);
     }
-    if (remainder > 0 && sum.integerSize < DATA_SIZE) {
-        sum.integer[sum.integerSize++] = remainder;
+
+    if (remainder > 0) {
+        if (sum.integerSize < DATA_SIZE) {
+            responseCode = SUCCESS;
+            sum.integer[sum.integerSize++] = remainder;
+        } else {
+            responseCode = INTEGER_OVERFLOWED;
+        }
+    } else {
+        responseCode = SUCCESS;
     }
 
     // удаление незначащих нулей, которые могут образоваться
@@ -146,7 +154,7 @@ LongNum absSum(LongNum& a, LongNum& b) {
 
 
 // вычитает целую и дробную части, игнорируя знак (то есть складывает по модулю)
-LongNum absSub(LongNum& a, LongNum& b) {
+LongNum absSub(LongNum& a, LongNum& b, int& responseCode) {
     LongNum sub;
     int remainder = 0;
 
@@ -167,6 +175,8 @@ LongNum absSub(LongNum& a, LongNum& b) {
         subNumbers(sub.integer[i], remainder, higher.integer[i], lower.integer[i]);
     }
 
+    responseCode = SUCCESS;
+
     // удаление незначащих нулей, которые могут образоваться
     while (sub.integerSize > 1 && sub.integer[sub.integerSize - 1] == 0) {
         --sub.integerSize;
@@ -180,59 +190,64 @@ LongNum absSub(LongNum& a, LongNum& b) {
 
 
 // парсит строку, в которой должно находиться число LongNum, и при успехе преобразует строку в num
-bool readLongNum(std::ifstream& inFile, LongNum& num) {
+int readLongNum(std::ifstream& inFile, LongNum& num) {
     std::string line;
+    int code;
     getline(inFile, line);
     if (static_cast<int>( line.find('\r') ) > -1) {
         line.erase(line.length() - 1);
     }
     if ( isParsable(line) ) {
         std::string element;
-        bool isOverflowed = false;
 
         num.sign = line[0] != '-';
         std::string integerString = getInteger(line);
         std::string fractionString = getFraction(line);
         int integerLength = static_cast<int>( integerString.length() );
         int fractionLength = static_cast<int>( fractionString.length() );
+        bool isIntegerOverflowed = integerLength > DATA_SIZE * 2;
+        bool isFractionOverflowed = fractionLength > DATA_SIZE * 2;
 
-        num.integerSize = 0;
-        element = "";
-        for (int i = integerLength - 1; i >= 0; --i) {
-            element += integerString[i];
-            if (element.length() == 2 || i == 0) {
-                element = reverse(element);
-                num.integer[num.integerSize++] = std::stoi(element);
-                element.clear();
-                if (num.integerSize == DATA_SIZE) {
-                    std::cout << dataOverflowed() << std::endl;
-                    isOverflowed = true;
-                    break;
+        if (!isIntegerOverflowed && !isFractionOverflowed) {
+            num.integerSize = 0;
+            element = "";
+            for (int i = integerLength - 1; i >= 0; --i) {
+                element += integerString[i];
+                if (element.length() == 2 || i == 0) {
+                    element = reverse(element);
+                    num.integer[num.integerSize++] = std::stoi(element);
+                    element.clear();
                 }
             }
-        }
 
-        num.fractionSize = 0;
-        element = "";
-        for (int i = 0; i < fractionLength; ++i) {
-            element += fractionString[i];
-            if (element.length() == 2 || i == fractionLength - 1) {
-                num.fraction[num.fractionSize] = std::stoi(element);
-                if (i == fractionLength - 1 && element.length() == 1) {
-                    num.fraction[num.fractionSize] *= 10;
-                }
-                ++num.fractionSize;
-                element.clear();
-                if (num.fractionSize == DATA_SIZE && !isOverflowed) {
-                    std::cout << dataOverflowed() << std::endl;
-                    break;
+            num.fractionSize = 0;
+            element = "";
+            for (int i = 0; i < fractionLength; ++i) {
+                element += fractionString[i];
+                if (element.length() == 2 || i == fractionLength - 1) {
+                    num.fraction[num.fractionSize] = std::stoi(element);
+                    if (i == fractionLength - 1 && element.length() == 1) {
+                        num.fraction[num.fractionSize] *= 10;
+                    }
+                    ++num.fractionSize;
+                    element.clear();
                 }
             }
-        }
 
-        return !(!num.sign && num.integerSize == 1 && num.integer[0] == 0 && num.fractionSize == 0);
+            if (!num.sign && num.integerSize == 1 && num.integer[0] == 0 && num.fractionSize == 0) {
+                return MINUS_ZERO;
+            } else {
+                return SUCCESS;
+            }
+        } else if (isIntegerOverflowed && !isFractionOverflowed) {
+            return INTEGER_OVERFLOWED;
+        } else if (!isIntegerOverflowed && isFractionOverflowed) {
+            return FRACTION_OVERFLOWED;
+        } else {
+            return INTEGER_AND_FRACTION_OVERFLOWED;
+        }
     }
-    return false;
+    return UNPARSABLE;
 }
 
 
@@ -307,15 +322,15 @@ bool isLess(LongNum& a, LongNum& b, bool abs) {
 }
 
 
-LongNum sumLongNum(LongNum& a, LongNum& b) {
+LongNum sumLongNum(LongNum& a, LongNum& b, int& responseCode) {
     LongNum sum;
     if (a.sign == b.sign) {
-        sum = absSum(a, b);
+        sum = absSum(a, b, responseCode);
         sum.sign = a.sign;
     } else {
         if ( !isEqual(a, b, true) ) {
             bool less = isLess(a, b, true);
-            sum = less ? absSub(b, a) : absSub(a, b);
+            sum = less ? absSub(b, a, responseCode) : absSub(a, b, responseCode);
             sum.sign = less ? b.sign : a.sign;
         }
     }
@@ -323,16 +338,16 @@ LongNum sumLongNum(LongNum& a, LongNum& b) {
 }
 
 
-LongNum subLongNum(LongNum& a, LongNum& b) {
+LongNum subLongNum(LongNum& a, LongNum& b, int& responseCode) {
     LongNum sub;
     if (a.sign == b.sign) {
         if ( !isEqual(a, b, true) ) {
             bool less = isLess(a, b, true);
-            sub = less ? absSub(b, a) : absSub(a, b);
+            sub = less ? absSub(b, a, responseCode) : absSub(a, b, responseCode);
             sub.sign = less ? !b.sign : a.sign;
         }
     } else {
-        sub = absSum(a, b);
+        sub = absSum(a, b, responseCode);
         sub.sign = a.sign;
     }
     return sub;

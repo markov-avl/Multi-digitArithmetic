@@ -15,9 +15,18 @@ typedef struct LongNum {
     }
 } LongNum;
 
-bool readLongNum(std::ifstream& inFile, LongNum& num);
+enum {
+    SUCCESS,
+    UNPARSABLE,
+    MINUS_ZERO,
+    INTEGER_OVERFLOWED,
+    FRACTION_OVERFLOWED,
+    INTEGER_AND_FRACTION_OVERFLOWED
+};
+
+int readLongNum(std::ifstream& inFile, LongNum& num);
 void writeLongNum(std::ofstream& outFile, LongNum& num);
 bool isEqual(LongNum& a, LongNum& b, bool abs = false);
 bool isLess(LongNum& a, LongNum& b, bool abs = false);
-LongNum sumLongNum(LongNum& a, LongNum& b);
-LongNum subLongNum(LongNum& a, LongNum& b);
+LongNum sumLongNum(LongNum& a, LongNum& b, int& responseCode);
+LongNum subLongNum(LongNum& a, LongNum& b, int& responseCode);

@@ -25,21 +25,44 @@ bool process(std::ifstream& inFile, std::ofstream& outFile) {
         outFile << fileNotFound(IN_PATH);
     } else {
         LongNum sum;
+        int responseCode;
         bool sign = true;
         unsigned int index = 1;
 
         while ( !inFile.eof() ) {
             if (index % 2 == 1) {
                 LongNum num;
-                if ( !readLongNum(inFile, num) ) {
-                    outFile << invalidLongNum(index) << std::endl;
-                    isFileCorrect = false;
-                }
-                if (isFileCorrect) {
+                responseCode = readLongNum(inFile, num);
+                if (responseCode == SUCCESS && isFileCorrect) {
                     if (index == 1) {
                         sum = num;
                     } else {
-                        sum = sign ? sumLongNum(sum, num) : subLongNum(sum, num);
+                        if (sign) {
+                            sumLongNum(sum, num, responseCode);
+                        } else {
+                            subLongNum(sum, num, responseCode);
+                        }
+                        if (responseCode != SUCCESS) {
+                            isFileCorrect = false;
+                            if (responseCode == INTEGER_OVERFLOWED) {
+                                outFile << operationIntegerOverflowed(index - 1) << std::endl;
+                            } else  {
+                                outFile << operationFractionOverflowed(index - 1) << std::endl;
+                            }
+                        }
+                    }
+                } else {
+                    isFileCorrect = false;
+                    if (responseCode == UNPARSABLE) {
+                        outFile << unparsable(index) << std::endl;
+                    } else if (responseCode == MINUS_ZERO) {
+                        outFile << minusZero(index) << std::endl;
+                    } else if (responseCode == INTEGER_OVERFLOWED) {
+                        outFile << integerOverflowed(index) << std::endl;
+                    } else if (responseCode == FRACTION_OVERFLOWED) {
+                        outFile << fractionOverflowed(index) << std::endl;
+                    } else {
+                        outFile << integerAndFractionOverflowed(index) << std::endl;
                     }
                 }
             } else if ( !readSign(inFile, sign) ) {

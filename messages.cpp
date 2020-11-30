@@ -1,4 +1,5 @@
 #include <iostream>
+#include "constants.h"
 
 
 std::string fileNotFound(const std::string &path) {
@@ -26,18 +27,47 @@ std::string unsuccessfullyCompleted(const std::string &inPath, const std::string
 }
 
 
-std::string invalidLongNum(unsigned int index) {
-    return "Строка " + std::to_string(index) + " - неверно введено число LongNum (проверьте правильность синтаксиса " +
-        "числа LongNum и убедитесь, что в начале и в конце строки не присутствуют лишние пробелы)";
+std::string unparsable(unsigned int index) {
+    return "Строка " + std::to_string(index) + " - неверно введено число (проверьте правильность синтаксиса)";
+}
+
+
+std::string minusZero(unsigned int index) {
+    return "Строка " + std::to_string(index) + " - ноль не может быть со знаком минус";
+}
+
+
+std::string integerOverflowed(unsigned int index) {
+    return "Строка " + std::to_string(index) + " - целая часть числа переполнена (максимум " +
+        std::to_string(DATA_SIZE * 2) + " цифр)";
+}
+
+
+std::string fractionOverflowed(unsigned int index) {
+    return "Строка " + std::to_string(index) + " - дробная часть числа переполнена (максимум " +
+           std::to_string(DATA_SIZE * 2) + " цифр)";
+}
+
+
+std::string integerAndFractionOverflowed(unsigned int index) {
+    return "Строка " + std::to_string(index) + " - целая и дробная части числа переполнена (максимум " +
+           std::to_string(DATA_SIZE * 2) + " цифр)";
+}
+
+
+std::string operationIntegerOverflowed(unsigned int index) {
+    return "Строка " + std::to_string(index) + " - произошло переполнение памяти под целую часть нового числа во " +
+        "время выполнения операции";
+}
+
+
+std::string operationFractionOverflowed(unsigned int index) {
+    return "Строка " + std::to_string(index) + " - произошло переполнение памяти под дробную часть нового числа во " +
+           "время выполнения операции";
 }
 
 
 std::string invalidSign(unsigned int index) {
     return "Строка " + std::to_string(index) + " - неверно введен арифметический знак (поддерживаются только знаки " +
         "\"+\" и \"-\", и также убедитесь, что в начале и в конце строки не присутствуют лишние пробелы)";
-}
-
-
-std::string dataOverflowed() {
-    return "Произошло переполнение памяти под число, итоговое вычисление будет неверным";
 }
