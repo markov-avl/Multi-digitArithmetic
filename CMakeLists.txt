@@ -3,4 +3,4 @@ project(Multi-digitArithmetic)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(Multi-digitArithmetic main.cpp longnum.cpp messages.cpp constants.cpp)
+add_executable(main main.cpp src/longnum.cpp src/messages.cpp src/constants.cpp)

@@ -1,7 +1,7 @@
 #include <iostream>
-#include "constants.h"
-#include "messages.h"
-#include "longnum.h"
+#include "src/constants.h"
+#include "src/messages.h"
+#include "src/longnum.h"
 
 
 bool readSign(std::ifstream& inFile, bool& sign) {
