@@ -15,7 +15,7 @@ typedef struct LongNum {
     }
 } LongNum;
 
-enum {
+enum code {
     SUCCESS,
     UNPARSABLE,
     MINUS_ZERO,

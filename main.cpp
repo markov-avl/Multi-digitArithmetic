@@ -3,7 +3,6 @@
 #include "src/messages.h"
 #include "src/longnum.h"
 
-
 bool readSign(std::ifstream& inFile, bool& sign) {
     std::string line;
     getline(inFile, line);
@@ -38,9 +37,9 @@ bool process(std::ifstream& inFile, std::ofstream& outFile) {
                         sum = num;
                     } else {
                         if (sign) {
-                            sumLongNum(sum, num, responseCode);
+                            sum = sumLongNum(sum, num, responseCode);
                         } else {
-                            subLongNum(sum, num, responseCode);
+                            sum = subLongNum(sum, num, responseCode);
                         }
                         if (responseCode != SUCCESS) {
                             isFileCorrect = false;
@@ -61,7 +60,7 @@ bool process(std::ifstream& inFile, std::ofstream& outFile) {
                         outFile << integerOverflowed(index) << std::endl;
                     } else if (responseCode == FRACTION_OVERFLOWED) {
                         outFile << fractionOverflowed(index) << std::endl;
-                    } else {
+                    } else if (responseCode == INTEGER_AND_FRACTION_OVERFLOWED)  {
                         outFile << integerAndFractionOverflowed(index) << std::endl;
                     }
                 }

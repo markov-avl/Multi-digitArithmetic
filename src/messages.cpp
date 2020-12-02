@@ -39,19 +39,19 @@ std::string minusZero(unsigned int index) {
 
 std::string integerOverflowed(unsigned int index) {
     return "Строка " + std::to_string(index) + " - целая часть числа переполнена (максимум " +
-        std::to_string(DATA_SIZE * 2) + " цифр)";
+        std::to_string(DATA_SIZE * 2) + ")";
 }
 
 
 std::string fractionOverflowed(unsigned int index) {
     return "Строка " + std::to_string(index) + " - дробная часть числа переполнена (максимум " +
-           std::to_string(DATA_SIZE * 2) + " цифр)";
+           std::to_string(DATA_SIZE * 2) + ")";
 }
 
 
 std::string integerAndFractionOverflowed(unsigned int index) {
-    return "Строка " + std::to_string(index) + " - целая и дробная части числа переполнена (максимум " +
-           std::to_string(DATA_SIZE * 2) + " цифр)";
+    return "Строка " + std::to_string(index) + " - целая и дробная части числа переполнены (максимум " +
+           std::to_string(DATA_SIZE * 2) + ")";
 }
 
 
